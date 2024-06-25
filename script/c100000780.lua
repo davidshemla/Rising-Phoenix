@@ -126,7 +126,6 @@ function s.bantg(e, tp, eg, ep, ev, re, r, rp, chk, chkc)
     Duel.SetOperationInfo(0, CATEGORY_REMOVE, g, #g, 0, 0)
 end
 
-
 function s.banop(e, tp, eg, ep, ev, re, r, rp)
     local g = Duel.GetChainInfo(0, CHAININFO_TARGET_CARDS)
     if not g then
@@ -138,7 +137,6 @@ function s.banop(e, tp, eg, ep, ev, re, r, rp)
     local rg = oppo_g:RandomSelect(tp, count)
     Duel.Remove(rg, POS_FACEUP, REASON_EFFECT)
 end
-
 
 function s.bancon2(e, tp, eg, ep, ev, re, r, rp)
     local oppo_g = Duel.GetMatchingGroup(Card.IsAbleToRemove, tp, 0, LOCATION_GRAVE, nil)
