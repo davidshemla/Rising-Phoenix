@@ -6,7 +6,7 @@ function s.initial_effect(c)
     local e4 = Effect.CreateEffect(c)
     e4:SetDescription(aux.Stringid(id, 2))
     e4:SetCountLimit(1, id)
-    e4:SetCategory(CATEGORY_DESTROY)
+    e4:SetCategory(CATEGORY_REMOVE)
     e4:SetType(EFFECT_TYPE_IGNITION)
     e4:SetProperty(EFFECT_FLAG_CARD_TARGET)
     e4:SetRange(LOCATION_MZONE)
@@ -20,7 +20,7 @@ function s.initial_effect(c)
     local e5 = Effect.CreateEffect(c)
     e5:SetDescription(aux.Stringid(id, 3))
     e5:SetCountLimit(1, id)
-    e5:SetCategory(CATEGORY_DESTROY)
+    e5:SetCategory(CATEGORY_REMOVE)
     e5:SetType(EFFECT_TYPE_IGNITION)
     e5:SetProperty(EFFECT_FLAG_CARD_TARGET)
     e5:SetRange(LOCATION_MZONE)
@@ -34,7 +34,7 @@ function s.initial_effect(c)
     local e6 = Effect.CreateEffect(c)
     e6:SetDescription(aux.Stringid(id, 4))
     e6:SetCountLimit(1, id)
-    e6:SetCategory(CATEGORY_DESTROY)
+    e6:SetCategory(CATEGORY_REMOVE)
     e6:SetType(EFFECT_TYPE_IGNITION)
     e6:SetProperty(EFFECT_FLAG_CARD_TARGET)
     e6:SetRange(LOCATION_MZONE)
@@ -133,11 +133,9 @@ function s.banop(e, tp, eg, ep, ev, re, r, rp)
     end
     local sg = g:Filter(Card.IsRelateToEffect, nil, e)
     local oppo_g = Duel.GetMatchingGroup(Card.IsAbleToRemove, tp, 0, LOCATION_GRAVE, nil)
-    if sg:GetCount() >= oppo_g:GetCount() then
-        Duel.Remove(oppo_g, POS_FACEUP, REASON_EFFECT)
-    else
-        Duel.Remove(sg, POS_FACEUP, REASON_EFFECT)
-    end
+    local count = math.min(5, oppo_g:GetCount())
+    local rg = oppo_g:RandomSelect(tp, count)
+    Duel.Remove(rg, POS_FACEUP, REASON_EFFECT)
 end
 
 function s.bancon2(e, tp, eg, ep, ev, re, r, rp)
@@ -169,11 +167,9 @@ function s.banop2(e, tp, eg, ep, ev, re, r, rp)
     end
     local sg = g:Filter(Card.IsRelateToEffect, nil, e)
     local oppo_g = Duel.GetMatchingGroup(Card.IsAbleToRemove, tp, 0, LOCATION_GRAVE, nil)
-    if sg:GetCount() >= oppo_g:GetCount() then
-        Duel.Remove(oppo_g, POS_FACEUP, REASON_EFFECT)
-    else
-        Duel.Remove(sg, POS_FACEUP, REASON_EFFECT)
-    end
+    local count = math.min(10, oppo_g:GetCount())
+    local rg = oppo_g:RandomSelect(tp, count)
+    Duel.Remove(rg, POS_FACEUP, REASON_EFFECT)
 end
 
 function s.bancon3(e, tp, eg, ep, ev, re, r, rp)
@@ -205,9 +201,7 @@ function s.banop3(e, tp, eg, ep, ev, re, r, rp)
     end
     local sg = g:Filter(Card.IsRelateToEffect, nil, e)
     local oppo_g = Duel.GetMatchingGroup(Card.IsAbleToRemove, tp, 0, LOCATION_GRAVE, nil)
-    if sg:GetCount() >= oppo_g:GetCount() then
-        Duel.Remove(oppo_g, POS_FACEUP, REASON_EFFECT)
-    else
-        Duel.Remove(sg, POS_FACEUP, REASON_EFFECT)
-    end
+    local count = math.min(15, oppo_g:GetCount())
+    local rg = oppo_g:RandomSelect(tp, count)
+    Duel.Remove(rg, POS_FACEUP, REASON_EFFECT)
 end
