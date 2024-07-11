@@ -47,12 +47,10 @@ function s.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	local g=Duel.SelectMatchingCard(tp,s.cfilter,tp,LOCATION_HAND,0,1,1,e:GetHandler())
 	Duel.ConfirmCards(1-tp,g)
 	Duel.ShuffleHand(tp)
-	e:SetLabel(g:GetFirst():GetCode())
 end
 
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
-	local lp=Duel.GetLP(tp)
-	if chk==0 then return lp<=7000 and Duel.IsExistingMatchingCard(Card.IsAbleToRemove,tp,0,LOCATION_GRAVE,1,nil) end
+	if chk==0 then return Duel.GetLP(tp)<=7000 and Duel.IsExistingMatchingCard(Card.IsAbleToRemove,tp,0,LOCATION_GRAVE,1,nil) end
 end
 
 function s.operation(e,tp,eg,ep,ev,re,r,rp)
@@ -66,9 +64,8 @@ function s.operation(e,tp,eg,ep,ev,re,r,rp)
 		max_banish=5
 	end
 	local g=Duel.GetMatchingGroup(Card.IsAbleToRemove,tp,0,LOCATION_GRAVE,nil)
-	if g:GetCount()>0 then
-		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-		local sg=g:Select(tp,1,math.min(max_banish,g:GetCount()),nil)
+	if #g>0 then
+		local sg=g:RandomSelect(tp,math.min(#g,max_banish))
 		Duel.Remove(sg,POS_FACEUP,REASON_EFFECT)
 	end
 end
