@@ -11,12 +11,11 @@ function s.initial_effect(c)
 	e1:SetCondition(s.lpcon)
 	e1:SetOperation(s.lpop)
 	c:RegisterEffect(e1)
-	-- Reveal and banish cards from opponent's Graveyard
+	-- Reveal and banish cards from opponent's Graveyard (Ignition effect)
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(id,0))
 	e2:SetCategory(CATEGORY_REMOVE)
-	e2:SetType(EFFECT_TYPE_QUICK_O)
-	e2:SetCode(EVENT_FREE_CHAIN)
+	e2:SetType(EFFECT_TYPE_IGNITION)
 	e2:SetRange(LOCATION_MZONE)
 	e2:SetCountLimit(1,id)
 	e2:SetCost(s.cost)
@@ -54,16 +53,6 @@ end
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	local lp=Duel.GetLP(tp)
 	if chk==0 then return lp<=7000 and Duel.IsExistingMatchingCard(Card.IsAbleToRemove,tp,0,LOCATION_GRAVE,1,nil) end
-	local max_banish=0
-	if lp<=2000 then
-		max_banish=15
-	elseif lp<=5000 then
-		max_banish=10
-	elseif lp<=7000 then
-		max_banish=5
-	end
-	local g=Duel.GetMatchingGroup(Card.IsAbleToRemove,tp,0,LOCATION_GRAVE,nil)
-	Duel.SetOperationInfo(0,CATEGORY_REMOVE,g,math.min(g:GetCount(),max_banish),0,0)
 end
 
 function s.operation(e,tp,eg,ep,ev,re,r,rp)
@@ -77,8 +66,9 @@ function s.operation(e,tp,eg,ep,ev,re,r,rp)
 		max_banish=5
 	end
 	local g=Duel.GetMatchingGroup(Card.IsAbleToRemove,tp,0,LOCATION_GRAVE,nil)
-	if g:GetCount()>=max_banish then
-		local sg=g:RandomSelect(tp,max_banish)
+	if g:GetCount()>0 then
+		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
+		local sg=g:Select(tp,1,math.min(max_banish,g:GetCount()),nil)
 		Duel.Remove(sg,POS_FACEUP,REASON_EFFECT)
 	end
 end
