@@ -84,7 +84,7 @@ function c100001222.filter22(c)
 	return c:IsFaceup() and c:IsCode(56433456)
 end
 function c100001222.con(e)
-	return Duel.IsExistingMatchingCard(c100001222.filter22,e:GetHandler():GetControler(),LOCATION_GRAVE,0,1,nil)
+	return Duel.IsExistingMatchingCard(c100001222.filter22,e:GetHandler():GetControler(),LOCATION_FIELD,0,1,nil)
 end
 function c100001222.indtg(e,c)
 	return c:IsRace(RACE_FAIRY) and c:IsAttribute(ATTRIBUTE_LIGHT) and c:IsLevelBelow(4)
