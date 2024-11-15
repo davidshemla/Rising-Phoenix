@@ -69,6 +69,16 @@ function c100001222.initial_effect(c)
 	local e22=e21:Clone()
 	e22:SetCode(EFFECT_INDESTRUCTABLE_EFFECT)
 	c:RegisterEffect(e22)
+	--send cards to deck
+	local e7=Effect.CreateEffect(c)
+	e7:SetCategory(CATEGORY_TODECK)
+	e7:SetType(EFFECT_TYPE_IGNITION)
+	e7:SetRange(LOCATION_SZONE)
+	e7:SetProperty(EFFECT_FLAG_CARD_TARGET)
+	e7:SetCountLimit(1)
+	e7:SetTarget(s.tdtg)
+	e7:SetOperation(s.tdop)
+	c:RegisterEffect(e7)
 end
 function c100001222.filter22(c)
 	return c:IsFaceup() and c:IsCode(56433456)
@@ -110,4 +120,24 @@ function c100001222.thop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.ShuffleHand(tp)
 	end
 	Duel.ShuffleDeck(tp)
+end
+
+function s.tdfilter(c,e)
+	return (c:IsRace(RACE_FAIRY) or c:IsType(TYPE_COUNTER)) and c:IsAbleToDeck() and (not e or c:IsCanBeEffectTarget(e))
+end
+function s.tdtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chkc then return false end
+	local g=Duel.GetMatchingGroup(s.tdfilter,tp,LOCATION_GRAVE,0,nil,e)
+	if chk==0 then return g:GetClassCount(Card.GetCode)>=3 end
+	local tg=aux.SelectUnselectGroup(g,e,tp,3,3,aux.dncheck,1,tp,HINTMSG_TODECK)
+	Duel.SetTargetCard(tg)
+	Duel.SetOperationInfo(0,CATEGORY_TODECK,tg,#tg,0,0)
+end
+function s.tdop(e,tp,eg,ep,ev,re,r,rp)
+	if not e:GetHandler():IsRelateToEffect(e) then return end
+	local tg=Duel.GetTargetCards(e)
+	if not tg or #tg==0 then return end
+	if Duel.SendtoDeck(tg,nil,SEQ_DECKTOP,REASON_EFFECT)==0 then return end
+	local ct=Duel.GetOperatedGroup():FilterCount(Card.IsLocation,nil,LOCATION_DECK)
+	if ct>0 then Duel.SortDecktop(tp,tp,ct) end
 end
