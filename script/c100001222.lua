@@ -82,11 +82,8 @@ function s.initial_effect(c)
     c:RegisterEffect(e10)
 end
 
-function s.filter22(c)
-    return c:IsFaceup() and c:IsCode(56433456)
-end
 function s.con(e)
-    return Duel.IsExistingMatchingCard(s.filter22,e:GetHandler():GetControler(),LOCATION_FIELD,0,1,nil)
+    return True
 end
 function s.indtg(e,c)
     return c:IsRace(RACE_FAIRY) and c:IsAttribute(ATTRIBUTE_LIGHT) and c:IsLevelBelow(4)
